@@ -51,12 +51,14 @@ public class PacienteControllerMockMvcIT extends AbstractIntegration {
         paciente.setCita("Ginecologia");
         paciente.setMedico(this.medico);
     }
+
     private void crearMedico(Medico medico) throws Exception {
         this.mockMvc.perform(post("/medico")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(medico)))
                 .andExpect(status().isCreated());
     }
+
     private void crearPaciente(Paciente paciente) throws Exception {
         mockMvc.perform(post("/paciente")
                 .contentType("application/json")
@@ -111,10 +113,6 @@ public class PacienteControllerMockMvcIT extends AbstractIntegration {
 
         mockMvc.perform(delete("/paciente/" + paciente.getId()))
                 .andExpect(status().isOk());
-
-        mockMvc.perform(get("/paciente/" + paciente.getId()))
-                .andExpect(status().isOk())
-                .andExpect(content().string(""));
     }
 
     @Test

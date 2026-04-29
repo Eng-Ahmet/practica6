@@ -11,12 +11,12 @@ A Spring Boot REST API that models a small medical records system. Built as a pr
 
 ## Domain Model
 
-| Entity    | Description                                                             |
-|-----------|-------------------------------------------------------------------------|
-| `Medico`  | Medical doctor with `id`, `nombre`, `dni`, `especialidad`               |
-| `Paciente`| Patient with `id`, `nombre`, `dni`, `edad`, `cita`, assigned doctor     |
-| `Imagen`  | Medical image (binary, compressed) linked to a patient                  |
-| `Informe` | AI-generated prediction report linked to an image                       |
+| Entity     | Description                                                         |
+| ---------- | ------------------------------------------------------------------- |
+| `Medico`   | Medical doctor with `id`, `nombre`, `dni`, `especialidad`           |
+| `Paciente` | Patient with `id`, `nombre`, `dni`, `edad`, `cita`, assigned doctor |
+| `Imagen`   | Medical image (binary, compressed) linked to a patient              |
+| `Informe`  | AI-generated prediction report linked to an image                   |
 
 Relationships: `Medico` ←1:N→ `Paciente` ←1:N→ `Imagen` ←1:N→ `Informe`
 
@@ -49,7 +49,7 @@ src/
 ## Requirements
 
 | Tool  | Min version |
-|-------|-------------|
+| ----- | ----------- |
 | Java  | 21          |
 | Maven | 3.8+        |
 
@@ -68,28 +68,28 @@ Swagger UI: `http://localhost:8080/swagger-ui.html`
 
 ### Main endpoints
 
-| Method | Path                      | Description                          |
-|--------|---------------------------|--------------------------------------|
-| GET    | `/medico/{id}`            | Get doctor by ID                     |
-| GET    | `/medico/dni/{dni}`       | Get doctor by DNI                    |
-| POST   | `/medico`                 | Create doctor                        |
-| PUT    | `/medico`                 | Update doctor                        |
-| DELETE | `/medico/{id}`            | Delete doctor                        |
-| GET    | `/paciente/{id}`          | Get patient by ID                    |
-| GET    | `/paciente/medico/{id}`   | List patients by doctor              |
-| POST   | `/paciente`               | Create patient                       |
-| PUT    | `/paciente`               | Update patient                       |
-| DELETE | `/paciente/{id}`          | Delete patient                       |
-| POST   | `/imagen`                 | Upload image (multipart)             |
-| GET    | `/imagen/{id}`            | Download image bytes                 |
-| GET    | `/imagen/info/{id}`       | Get image metadata                   |
-| GET    | `/imagen/predict/{id}`    | Get AI prediction for image          |
-| GET    | `/imagen/paciente/{id}`   | List images for a patient            |
-| DELETE | `/imagen/{id}`            | Delete image                         |
-| GET    | `/informe/{id}`           | Get report by ID                     |
-| GET    | `/informe/imagen/{id}`    | List reports for an image            |
-| POST   | `/informe`                | Create report                        |
-| DELETE | `/informe/{id}`           | Delete report                        |
+| Method | Path                    | Description                 |
+| ------ | ----------------------- | --------------------------- |
+| GET    | `/medico/{id}`          | Get doctor by ID            |
+| GET    | `/medico/dni/{dni}`     | Get doctor by DNI           |
+| POST   | `/medico`               | Create doctor               |
+| PUT    | `/medico`               | Update doctor               |
+| DELETE | `/medico/{id}`          | Delete doctor               |
+| GET    | `/paciente/{id}`        | Get patient by ID           |
+| GET    | `/paciente/medico/{id}` | List patients by doctor     |
+| POST   | `/paciente`             | Create patient              |
+| PUT    | `/paciente`             | Update patient              |
+| DELETE | `/paciente/{id}`        | Delete patient              |
+| POST   | `/imagen`               | Upload image (multipart)    |
+| GET    | `/imagen/{id}`          | Download image bytes        |
+| GET    | `/imagen/info/{id}`     | Get image metadata          |
+| GET    | `/imagen/predict/{id}`  | Get AI prediction for image |
+| GET    | `/imagen/paciente/{id}` | List images for a patient   |
+| DELETE | `/imagen/{id}`          | Delete image                |
+| GET    | `/informe/{id}`         | Get report by ID            |
+| GET    | `/informe/imagen/{id}`  | List reports for an image   |
+| POST   | `/informe`              | Create report               |
+| DELETE | `/informe/{id}`         | Delete report               |
 
 ---
 

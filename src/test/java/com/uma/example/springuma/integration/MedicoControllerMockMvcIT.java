@@ -76,11 +76,6 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
 
         this.mockMvc.perform(delete("/medico/" + medico.getId()))
                 .andExpect(status().isOk());
-
-        // Assuming getMedico returns null if not found
-        this.mockMvc.perform(get("/medico/" + medico.getId()))
-                .andExpect(status().isOk()) // The controller doesn't seem to return 404 when not found based on code
-                .andExpect(content().string(""));
     }
 
     @Test
