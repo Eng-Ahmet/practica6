@@ -168,3 +168,4 @@ public class ImagenControllerWebTestClientIT extends AbstractIntegration {
                 .expectBodyList(Imagen.class)
                 .hasSize(0);
     }
+}
