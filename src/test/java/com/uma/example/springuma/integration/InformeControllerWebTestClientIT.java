@@ -13,6 +13,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -26,7 +28,6 @@ import com.uma.example.springuma.model.Paciente;
 import jakarta.annotation.PostConstruct;
 import reactor.core.publisher.Mono;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class InformeControllerWebTestClientIT extends AbstractIntegration {
 
         @LocalServerPort
@@ -47,15 +48,16 @@ public class InformeControllerWebTestClientIT extends AbstractIntegration {
 
         @BeforeEach
         void setUp() {
+                cleanDatabase();
 
                 medico = new Medico();
                 medico.setNombre("Miguel");
-                medico.setId(1L);
+//                medico.setId(1L);
                 medico.setDni("835");
                 medico.setEspecialidad("Ginecologo");
 
                 paciente = new Paciente();
-                paciente.setId(1L);
+//                paciente.setId(1L);
                 paciente.setNombre("Maria");
                 paciente.setDni("888");
                 paciente.setEdad(20);
@@ -63,20 +65,25 @@ public class InformeControllerWebTestClientIT extends AbstractIntegration {
                 paciente.setMedico(medico);
 
                 imagen = new Imagen();
-                imagen.setId(1L);
+//                imagen.setId(1L);
                 imagen.setPaciente(paciente);
 
                 // Crea médico
-                testClient.post().uri("/medico")
+                medico = testClient.post().uri("/medico")
                                 .body(Mono.just(medico), Medico.class)
                                 .exchange()
-                                .expectStatus().isCreated();
+                                .expectStatus().isCreated()
+                                .expectBody(Medico.class)
+                                .returnResult().getResponseBody();
 
                 // Crea paciente
-                testClient.post().uri("/paciente")
+                paciente.setMedico(medico);
+                paciente = testClient.post().uri("/paciente")
                                 .body(Mono.just(paciente), Paciente.class)
                                 .exchange()
-                                .expectStatus().isCreated();
+                                .expectStatus().isCreated()
+                                .expectBody(Paciente.class)
+                                .returnResult().getResponseBody();
 
                 // Crea imagen
                 MultipartBodyBuilder builder = new MultipartBodyBuilder();
@@ -98,7 +105,7 @@ public class InformeControllerWebTestClientIT extends AbstractIntegration {
                 this.imagen = result.getResponseBody().blockFirst();
 
                 informe = new Informe();
-                informe.setId(1L);
+//                informe.setId(1L);
                 informe.setContenido("Contenido del informe");
                 informe.setImagen(this.imagen);
                 informe.setPrediccion("NO CANCER");
@@ -107,10 +114,12 @@ public class InformeControllerWebTestClientIT extends AbstractIntegration {
         @Test
         @DisplayName("Crear informe y obtenerlo por ID")
         void createInforme_GetById() {
-                testClient.post().uri("/informe")
+                informe = testClient.post().uri("/informe")
                                 .body(Mono.just(informe), Informe.class)
                                 .exchange()
-                                .expectStatus().isCreated();
+                                .expectStatus().isCreated()
+                                .expectBody(Informe.class)
+                                .returnResult().getResponseBody();
 
                 testClient.get().uri("/informe/" + informe.getId())
                                 .exchange()

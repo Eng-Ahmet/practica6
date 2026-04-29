@@ -28,8 +28,8 @@ public class MedicoController {
     @PostMapping(value = "/medico", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> saveMedico(@RequestBody Medico medico) {
         try {
-            medicoService.addMedico(medico);
-            return ResponseEntity.status(201).build();
+            Medico savedMedico = medicoService.addMedico(medico);
+            return ResponseEntity.status(201).body(savedMedico);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("El medico ya existe");
         }

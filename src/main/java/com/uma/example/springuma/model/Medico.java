@@ -70,7 +70,7 @@ public class Medico implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        return (obj instanceof Medico) && ((Medico) obj).getDni() == this.dni;
+        return (obj instanceof Medico) && ((Medico) obj).getDni().equals(this.dni);
     }
 
     public int hashCode() {

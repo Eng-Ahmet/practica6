@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,18 +28,22 @@ public class MedicoControllerMockMvcIT extends AbstractIntegration {
 
     @BeforeEach
     void setUp() {
+        cleanDatabase();
         medico = new Medico();
-        medico.setId(1L);
+//        medico.setId(1L);
         medico.setDni("835");
         medico.setNombre("Miguel");
         medico.setEspecialidad("Ginecologia");
     }
 
     private void crearMedico(Medico medico) throws Exception {
-        this.mockMvc.perform(post("/medico")
+        String response = this.mockMvc.perform(post("/medico")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(medico)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Medico saved = objectMapper.readValue(response, Medico.class);
+        medico.setId(saved.getId());
     }
 
     @Test

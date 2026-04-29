@@ -34,8 +34,8 @@ public class InformeController {
     @PostMapping(value = "/informe", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> saveInforme(@RequestBody Informe informe) {
         try {
-            informeService.addInforme(informe);
-            return ResponseEntity.status(201).build();
+            Informe savedInforme = informeService.addInforme(informe);
+            return ResponseEntity.status(201).body(savedInforme);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body("El informe ya existe");

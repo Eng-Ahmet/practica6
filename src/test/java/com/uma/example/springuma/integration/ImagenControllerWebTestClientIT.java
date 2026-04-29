@@ -13,6 +13,8 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -27,7 +29,6 @@ import reactor.core.publisher.Mono;
 import org.springframework.web.reactive.function.BodyInserters;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ImagenControllerWebTestClientIT extends AbstractIntegration {
 
     @LocalServerPort
@@ -46,15 +47,16 @@ public class ImagenControllerWebTestClientIT extends AbstractIntegration {
 
     @BeforeEach
     void setUp() {
+        cleanDatabase();
 
         medico = new Medico();
         medico.setNombre("Miguel");
-        medico.setId(1L);
+//        medico.setId(1L);
         medico.setDni("835");
         medico.setEspecialidad("Ginecologo");
 
         paciente = new Paciente();
-        paciente.setId(1L);
+//        paciente.setId(1L);
         paciente.setNombre("Maria");
         paciente.setDni("888");
         paciente.setEdad(20);
@@ -62,16 +64,21 @@ public class ImagenControllerWebTestClientIT extends AbstractIntegration {
         paciente.setMedico(medico);
 
         // Crea médico
-        testClient.post().uri("/medico")
+        medico = testClient.post().uri("/medico")
                 .body(Mono.just(medico), Medico.class)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody(Medico.class)
+                .returnResult().getResponseBody();
 
         // Crea paciente
-        testClient.post().uri("/paciente")
+        paciente.setMedico(medico);
+        paciente = testClient.post().uri("/paciente")
                 .body(Mono.just(paciente), Paciente.class)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody(Paciente.class)
+                .returnResult().getResponseBody();
     }
 
     private void subirImagen(String nombreArchivo) {

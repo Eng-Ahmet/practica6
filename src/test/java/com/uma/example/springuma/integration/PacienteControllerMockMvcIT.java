@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,14 +39,15 @@ public class PacienteControllerMockMvcIT extends AbstractIntegration {
 
     @BeforeEach
     void setUp() {
+        cleanDatabase();
         medico = new Medico();
         medico.setNombre("Miguel");
-        medico.setId(1L);
+//        medico.setId(1L);
         medico.setDni("835");
         medico.setEspecialidad("Ginecologo");
 
         paciente = new Paciente();
-        paciente.setId(1L);
+//        paciente.setId(1L);
         paciente.setNombre("Maria");
         paciente.setDni("888");
         paciente.setEdad(20);
@@ -53,17 +56,23 @@ public class PacienteControllerMockMvcIT extends AbstractIntegration {
     }
 
     private void crearMedico(Medico medico) throws Exception {
-        this.mockMvc.perform(post("/medico")
+        String response = this.mockMvc.perform(post("/medico")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(medico)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Medico saved = objectMapper.readValue(response, Medico.class);
+        medico.setId(saved.getId());
     }
 
     private void crearPaciente(Paciente paciente) throws Exception {
-        mockMvc.perform(post("/paciente")
+        String response = mockMvc.perform(post("/paciente")
                 .contentType("application/json")
                 .content(objectMapper.writeValueAsString(paciente)))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        Paciente saved = objectMapper.readValue(response, Paciente.class);
+        paciente.setId(saved.getId());
     }
 
     private void getPacienteById(Long id, Paciente expected) throws Exception {

@@ -1,7 +1,8 @@
 # SpringUMA — Medical Records System
 
 ![CI/CD Status](https://github.com/Eng-Ahmet/Practica6Alumnos/actions/workflows/ci.yml/badge.svg)
-![Jacoco Coverage](https://img.shields.io/badge/coverage-80%25-brightgreen)
+![Jacoco Coverage](.github/badges/jacoco.svg)
+![Jacoco Branches](.github/badges/branches.svg)
 
 > ⚠️ Replace `<YOUR_USER>` and `<YOUR_REPO>` with your actual GitHub account details.
 
