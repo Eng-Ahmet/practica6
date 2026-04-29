@@ -16,7 +16,7 @@ public class MedicoService {
     }
 
     public Medico getMedico(Long id) {
-        return repositoryMedico.getReferenceById(id);
+        return repositoryMedico.findById(id).orElse(null);
     }
 
     public Medico addMedico(Medico m) {

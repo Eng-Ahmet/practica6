@@ -16,7 +16,7 @@ public class PacienteService {
     }
 
     public Paciente getPaciente(Long id) {
-        return repositoryPaciente.getReferenceById(id); 
+        return repositoryPaciente.findById(id).orElse(null); 
     }
 
     public Paciente addPaciente(Paciente p) {
